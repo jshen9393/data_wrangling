@@ -13,7 +13,7 @@ import re
 
 
 #file location
-file_loc = '[file download directory]'
+file_loc = 'c:\\in'
 os.chdir(file_loc)
 
 file = 'pbp-2015.csv'
@@ -171,8 +171,9 @@ formation = ['NO HUDDLE, SHOTGUN', 'NO HUDDLE','SHOTGUN']
 #shotgun and no huddle formations
 
 for f in formation:
+    f1 = f.replace(',','')
     regex = f.replace(' ','\s') 
-    df.loc[(df['PlayType']=='RUSH')  & (df['Formation']==f) &\
+    df.loc[(df['PlayType']=='RUSH')  & (df['Formation']==f1) &\
     (df['DataError'].isnull()),'Rusher']=df['Description'].str.extract('((?<='+regex +'\)\s)\d+\-[A-Z]\.[A-Z]+)').astype(str)
 else:
     pass
