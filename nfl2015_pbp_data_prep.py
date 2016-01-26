@@ -13,7 +13,7 @@ import re
 
 
 #file location
-file_loc = 'c:\\in'
+file_loc = '[file directory]'
 os.chdir(file_loc)
 
 file = 'pbp-2015.csv'
