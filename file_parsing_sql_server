@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep  8 18:04:47 2017
+
+@author: gemean
+"""
+
+import os
+import pyodbc
+
+file_directory = r'\\whitehall\shr\priv\Gemean\PADEP\Riskmaster\Recieved\20170830_USTIF-PA_PRODUCTION_RED_SINGLE_PAGE_TEXT\20170830_USTIF-PA_PRODUCTION_RED\IMAGES'
+
+con = pyodbc.connect('Trusted_Connection=yes', driver = '{SQL Server Native Client 11.0}',server ='PROC\MSSQLSERVER_2016', database = 'RMX_Production')
+cursor=con.cursor()
+
+
+for root, dirs, files in os.walk(file_directory):
+    for file in files:
+        if file.endswith('.txt'):
+            with open(os.path.join(root, file),encoding='latin-1') as f:           
+                try:
+                    r = f.read()
+                    cursor.execute("INSERT INTO A_Gem_USTI_Redact (filename,filepath,text) VALUES (?,?,?)",file,root,r)
+                    con.commit()                
+                    print(root,file)
+                except:
+                    cursor.execute("INSERT INTO A_Gem_USTI_Redact (filename,filepath,text) VALUES (?,?,?)",file,root,'invalid')
+                    con.commit()
+                    print(root,file)
+con.close()
+
